@@ -18,13 +18,14 @@ void BackTrackPermute(int* nums, int numsSize, int** pRet, int* pUsed, int* pRet
         return;
     }
     for (int i = 0; i < numsSize; i++) {
-        if (pUsed[i] == 0) {
-            iTmp = i;
-            pRet[*pRetPos][iCurPos] = nums[i];
-            pUsed[iTmp] = 1;
-            BackTrackPermute(nums, numsSize, pRet, pUsed, pRetPos, iCurPos + 1);
-            pUsed[iTmp] = 0;
+        if (pUsed[i] != 0) {
+            continue;
         }
+        iTmp = i;
+        pRet[*pRetPos][iCurPos] = nums[i];
+        pUsed[iTmp] = 1;
+        BackTrackPermute(nums, numsSize, pRet, pUsed, pRetPos, iCurPos + 1);
+        pUsed[iTmp] = 0;
     }
     return;
 }
