@@ -14,11 +14,11 @@ int MaxScore(int *cardPoints, int cardPointsSize, int k)
     int cardPointsSum = SumFirstNPoint(cardPoints, cardPointsSize);
     int curPointsSum = SumFirstNPoint(cardPoints, cardPointsSize - k);
     int minMiddleSum = curPointsSum;
-    for(int i = 0; i < k; i++){
+    for (int i = 0; i < k; i++) {
         curPointsSum = curPointsSum - cardPoints[leftIndex] + cardPoints[rightIndex];
         leftIndex++;
         rightIndex++;
-        minMiddleSum = minMiddleSum > curPointsSum ? curPointsSum : minMiddleSum;
+        minMiddleSum = (minMiddleSum > curPointsSum) ? curPointsSum : minMiddleSum;
     }
     return cardPointsSum - minMiddleSum;
 }

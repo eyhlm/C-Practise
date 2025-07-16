@@ -1,3 +1,7 @@
+#define SAFE_FREE(ptr) do { 
+    free(ptr);             
+    (ptr) = NULL;          
+} while(0)
 
 //计算结果数量函数
 int CalResultNumber(int numsSize)
@@ -9,23 +13,23 @@ int CalResultNumber(int numsSize)
     return result;
 }
 
-void BackTrackPermute(int* nums, int numsSize, int** pRet, int* pUsed, int* pRetPos, int iCurPos)
+void BackTrackPermute(int* nums, int numsSize, int** result, int* used, int* resultPos, int curPos)
 {
     int iTmp = 0;
-    if (iCurPos == numsSize) {
-        *pRetPos += 1;
-        memcpy(pRet[*pRetPos], pRet[(*pRetPos) - 1], sizeof(int) * numsSize);
+    if (curPos == numsSize) {
+        *resultPos += 1;
+        memcpy(result[*resultPos], result[(*resultPos) - 1], sizeof(int) * numsSize);
         return;
     }
     for (int i = 0; i < numsSize; i++) {
-        if (pUsed[i] != 0) {
+        if (used[i] != 0) {
             continue;
         }
         iTmp = i;
-        pRet[*pRetPos][iCurPos] = nums[i];
-        pUsed[iTmp] = 1;
-        BackTrackPermute(nums, numsSize, pRet, pUsed, pRetPos, iCurPos + 1);
-        pUsed[iTmp] = 0;
+        result[*resultPos][curPos] = nums[i];
+        used[iTmp] = 1;
+        BackTrackPermute(nums, numsSize, result, used, resultPos, curPos + 1);
+        used[iTmp] = 0;
     }
     return;
 }
@@ -35,49 +39,46 @@ int** Permute(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
     int iRetSize = 0;
     int iRetPos = 0;
     int* pRetCol = NULL;
-    int* pUsed = NULL;
-    int** pRet = NULL;
+    int* used = NULL;
+    int** result = NULL;
 
     iRetSize = CalResultNumber(numsSize);
 
     // 申请空间 
-    pRet = (int**)malloc(sizeof(int*) * (iRetSize + 1));
-    if (NULL == pRet) {
-        printf("malloc pRet failed!\n");
+    result = (int**)malloc(sizeof(int*) * (iRetSize + 1));
+    if (NULL == result) {
+        printf("malloc result failed!\n");
         return NULL;
     }
     pRetCol = (int*)malloc(sizeof(int) * (iRetSize + 1));
     if (NULL == pRetCol) {
         printf("malloc pRetCol failed!\n");
-        free(pRet);
-        pRet = NULL;
+        free(result);
+        result = NULL;
         return NULL;
     }
-    pUsed = (int*)malloc(sizeof(int) * numsSize);
-    if (NULL == pUsed) {
-        printf("malloc pUsed failed!\n");
-        free(pRet);
-        pRet = NULL;
-        free(pRetCol);
-        pRetCol = NULL;
-        return NULL;
+    used = (int*)malloc(sizeof(int) * numsSize);
+    if (NULL == used) {
+        printf("malloc used failed!\n");
+        SAFE_FREE(result);
+        SAFE_FREE(pRetCol);
     }
 
     // 初始化
-    memset(pUsed, 0x00, sizeof(int) * numsSize);
+    memset(used, 0x00, sizeof(int) * numsSize);
     for (int i = 0; i <= iRetSize; i++) {
-        pRet[i] = (int*)malloc(sizeof(int) * numsSize);
-        memset(pRet[i], 0x00, sizeof(int) * numsSize);
+        result[i] = (int*)malloc(sizeof(int) * numsSize);
+        memset(result[i], 0x00, sizeof(int) * numsSize);
         pRetCol[i] = numsSize;
     }
 
     // 调用回溯函数
-    BackTrackPermute(nums, numsSize, pRet, pUsed, &iRetPos, 0);
+    BackTrackPermute(nums, numsSize, result, used, &iRetPos, 0);
 
     // 释放空间
-    free(pUsed);
+    free(used);
 
     *returnSize = iRetSize;
     *returnColumnSizes = pRetCol;
-    return pRet;
+    return result;
 }

@@ -24,7 +24,7 @@ int MaxProfitAssignment(int *difficulty, int difficultySize, int *profit, int pr
     memset(dp, 0, (maxDifficulty + 1) * sizeof(int));
     
     for (int i = 0; i < difficultySize; i++) {
-        dp[difficulty[i]] = profit[i] > dp[difficulty[i]] ? profit[i] : dp[difficulty[i]]; // 相同的difficulty保留收益最高的结果
+        dp[difficulty[i]] = (profit[i] > dp[difficulty[i]]) ? profit[i] : dp[difficulty[i]]; // 相同的difficulty保留收益最高的结果
     }
     int curMax = 0;
     for (int i = 0; i < maxDifficulty + 1; i++) { // dp数组下标与difficulty对齐

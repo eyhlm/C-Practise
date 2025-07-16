@@ -13,7 +13,7 @@ typedef struct {
 } MyCircularDeque;
 
 
-MyCircularDeque *myCircularDequeCreate(int k)
+MyCircularDeque *MyCircularDequeCreate(int k)
 {
     MyCircularDeque *p = NULL;
     p = (MyCircularDeque *)malloc(sizeof(MyCircularDeque));

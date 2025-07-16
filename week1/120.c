@@ -21,7 +21,7 @@ int MinimumTotal(int** triangle, int triangleSize, int* triangleColSize)
 
     for (int i = triangleSize-2; i >= 0; i--) { // 从每行倒数第二个数字开始计算
         for (int j = 0; j < triangleColSize[i]; j++) {
-            int min = resArray[j] < resArray[j+1] ? resArray[j] : resArray[j+1];
+            int min = (resArray[j] < resArray[j+1]) ? resArray[j] : resArray[j+1];
             resArray[j] = triangle[i][j] + min;
         }
     }

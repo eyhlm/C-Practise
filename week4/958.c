@@ -10,19 +10,23 @@ bool IsCompleteTree(struct TreeNode* root)
     }
     int front = 0, cur = 0;
     treeNodeQuene[cur++] = root;
+    bool encounteredNull = false;
     while (front < cur) {
-        tmp = treeNodeQuene[front++];
-        if (tmp) {
-            treeNodeQuene[cur++] = tmp->left;
-            treeNodeQuene[cur++] = tmp->right;
-        } else {
-            while (front < cur) {
-                tmp = treeNodeQuene[front++];
-                if (tmp) {
-                    return false;
-                }
-            }
+        struct TreeNode* node = treeNodeQuene[front++];
+        
+        if (node == NULL) {
+            encounteredNull = true;
+            continue;
         }
+        
+        if (encounteredNull) {
+            free(treeNodeQuene);
+            return false;
+        }
+        treeNodeQuene[cur++] = node->left;
+        treeNodeQuene[cur++] = node->right;
     }
+    
+    free(treeNodeQuene);
     return true;
 }
